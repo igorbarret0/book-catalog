@@ -2,7 +2,8 @@
   MICROSERVIÇOS DE CONVERSÃO DE MOEDA PARA CATÁLOGO DE LIVROS
 </h1>
 
-Uma aplicação modular com dois microserviços: um para cadastro de livros e outro para conversão de preços em diferentes moedas. Ao cadastrar um livro, o preço inicial é em dólares  e é convertido dinamicamente para a moeda desejada usando uma API externa. O código inclui um proxy para acessar a API de câmbio, atualizando as informações do livro com ambiente e nova moeda.
+Uma aplicação modular com dois microserviços: um para cadastro de livros e outro para conversão de preços em diferentes moedas. Ao cadastrar um livro, o preço inicial é em dólares  e 
+é convertido dinamicamente para a moeda desejada usando uma API externa. O código inclui um proxy para acessar a API de câmbio, atualizando as informações do livro com ambiente e nova moeda.
 
 ## Tecnologias
 

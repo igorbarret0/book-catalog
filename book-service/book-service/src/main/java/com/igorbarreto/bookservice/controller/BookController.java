@@ -25,8 +25,6 @@ public class BookController {
     private Environment environment;
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired(required = true)
     private CambioProxy cambioProxy;
@@ -44,7 +42,7 @@ public class BookController {
 
         var book = optionalBook.get();
 
-        var cambio = cambioProxy.getCambio(book.getPrice(), "USD", currency);
+        var cambio = cambioProxy.getCambio(book.getPrice(), currency);
 
         var port = environment.getProperty("local.server.port");
         book.setEnvironment(port);
@@ -62,6 +60,7 @@ public class BookController {
         var bookSaved = bookRepository.save(book);
 
         var response = new BookResponse(
+
                 bookSaved.getAuthor(),
                 bookSaved.getPrice(),
                 bookSaved.getTitle()
@@ -71,40 +70,4 @@ public class BookController {
 
     }
 
-    /*
-    @GetMapping("/{id}/{currency}")
-    public Book findBookById(
-            @PathVariable(value = "id") Long id,
-            @PathVariable(value = "currency") String currency) {
-
-        var optionalBook = bookRepository.findById(id);
-
-        if (optionalBook.isEmpty()) {
-            throw new RuntimeException("Book not found");
-        }
-
-        var book = optionalBook.get();
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("amount", book.getPrice().toString());
-        params.put("from", "USD");
-        params.put("to", currency);
-
-        var url = "http://localhost:8000/cambio-service/{amount}/{from}/{to}";
-
-        var response = restTemplate.getForEntity(
-                url,
-                Cambio.class,
-                params);
-
-        var cambio = response.getBody();
-
-        var port = environment.getProperty("local.server.port");
-        book.setEnvironment(port);
-        book.setPrice(cambio.getConvertedValue());
-        book.setCurrency(currency);
-
-        return book;
-    }
-    */
 }

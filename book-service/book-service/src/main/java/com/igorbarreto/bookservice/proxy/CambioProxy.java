@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 @FeignClient(name = "cambio-service")
 public interface CambioProxy {
 
-    @GetMapping("/cambio-service/{amount}/{from}/{to}")
+    @GetMapping("/cambio-service/{amount}/{to}")
     public Cambio getCambio(
             @PathVariable(value = "amount") Double amount,
-            @PathVariable(value = "from") String from,
+            //             @PathVariable(value = "from") String from,
             @PathVariable(value = "to") String to
     );
 
