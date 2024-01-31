@@ -42,7 +42,7 @@ A API poderá ser acessada em [localhost:8100](http://localhost:8080).
 
 Para fazer as requisições HTTP abaixo, foi utilizada a ferramenta [Postman](https://www.postman.com/)
 
-- Salvar usuário
+- Salvar livro
 ```
 $ POST http://localhost:8100/book-service
 
