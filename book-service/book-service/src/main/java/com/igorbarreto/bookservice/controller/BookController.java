@@ -6,6 +6,7 @@ import com.igorbarreto.bookservice.model.Book;
 import com.igorbarreto.bookservice.proxy.CambioProxy;
 import com.igorbarreto.bookservice.repository.BookRepository;
 import com.igorbarreto.bookservice.response.Cambio;
+import com.igorbarreto.bookservice.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -22,51 +23,26 @@ import java.util.HashMap;
 public class BookController {
 
     @Autowired
-    private Environment environment;
-    @Autowired
-    private BookRepository bookRepository;
+    private BookService bookService;
 
-    @Autowired(required = true)
-    private CambioProxy cambioProxy;
 
     @GetMapping("/{id}/{currency}")
     public Book findBookById(
             @PathVariable(value = "id") Long id,
             @PathVariable(value = "currency") String currency) {
 
-        var optionalBook = bookRepository.findById(id);
+        return bookService.findBookById(id, currency);
 
-        if (optionalBook.isEmpty()) {
-            throw new RuntimeException("Book not found");
-        }
-
-        var book = optionalBook.get();
-
-        var cambio = cambioProxy.getCambio(book.getPrice(), currency);
-
-        var port = environment.getProperty("local.server.port");
-        book.setEnvironment(port);
-        book.setPrice(cambio.getConvertedValue());
-        book.setCurrency(currency);
-
-        return book;
     }
 
     @PostMapping
     public ResponseEntity<BookResponse> saveBook(@RequestBody BookRequest request) throws ParseException {
 
-        Book book = request.toModel();
+       var savedBook = bookService.saveBook(request);
 
-        var bookSaved = bookRepository.save(book);
+       return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
 
-        var response = new BookResponse(
 
-                bookSaved.getAuthor(),
-                bookSaved.getPrice(),
-                bookSaved.getTitle()
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
 
     }
 
